@@ -1,15 +1,23 @@
 package com.example.challengue_literatura_puma;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import com.example.challengue_literatura_puma.model.DatosLibro;
+import com.example.challengue_literatura_puma.repository.ILibroRepository;
+import com.example.challengue_literatura_puma.service.ConsumoAPI;
+import com.example.challengue_literatura_puma.service.ConvierteDatos;
+
+
 import java.util.Scanner;
 
 public class Principal {
     private Scanner teclado = new Scanner(System.in);
     private static final String BASE_URL = "https://gutendex.com/books";
+    private ConsumoAPI consumoAPI = new ConsumoAPI();
+    private ConvierteDatos convierteDatos = new ConvierteDatos();
+    private ILibroRepository repository;
+
+    public Principal(ILibroRepository repository) {
+        this.repository = repository;
+    }
 
 
     public void mostrarMenu(){
@@ -23,23 +31,24 @@ public class Principal {
             System.out.println(menu);
             opcion = teclado.nextInt();
             teclado.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    buscarLibroWeb();
+                    break;
+            }
         }
     }
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://gutendex.com/books"))
-            .build();
 
-    HttpResponse<String> response;
-
-    {
-        try {
-            response = client
-                    .send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    private DatosLibro getDatosLibros(){
+        System.out.println("Ingrese eel nombre del libro a buscar");
+        var nombreLibro = teclado.nextLine();
+        var json = consumoAPI.obtenerDatos(BASE_URL + nombreLibro.replace(" ", "+"));
+        System.out.println(json);
+        DatosLibro datos = convierteDatos.obtenerDatos(json, DatosLibro.class);
+        return datos;
     }
+    private void buscarLibroWeb() {
+    }
+
 }
