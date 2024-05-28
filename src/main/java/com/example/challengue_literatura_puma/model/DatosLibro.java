@@ -11,6 +11,7 @@ public record DatosLibro(
         @JsonAlias("title") String titulo,
         @JsonAlias("authors") List<DatosAutores> autores,
         @JsonAlias("languages") List<String> idioma,
+        @JsonAlias("copyright") String copyright,
         @JsonAlias("download_count") Integer descargas
 
 ) {

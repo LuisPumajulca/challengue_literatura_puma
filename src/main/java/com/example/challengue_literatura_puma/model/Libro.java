@@ -9,13 +9,14 @@ import java.util.stream.Collectors;
 public class Libro {
     @Id
     private Long id;
+    @Column(unique = true)
     private String titulo;
     @Enumerated(EnumType.STRING)
     private Idioma idioma;
     private String copyright;
     private Integer descargas;
-    @ManyToOne
-    private Autores autor;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Autores autores;
 
     public Libro() {
     }
@@ -24,6 +25,7 @@ public class Libro {
         this.titulo = libro.titulo();
         this.idioma = Idioma.fromString(libro.idioma().stream()
                 .limit(1).collect(Collectors.joining()));
+        this.copyright = libro.copyright();
         this.descargas = libro.descargas();
     }
 
@@ -67,11 +69,23 @@ public class Libro {
         this.descargas = descargas;
     }
 
-    public Autores getAutor() {
-        return autor;
+    public Autores getAutores() {
+        return autores;
     }
 
     public void setAutor(Autores autor) {
-        this.autor = autor;
+        this.autores = autor;
+    }
+
+    @Override
+    public String toString() {
+        return "Libro{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", idioma=" + idioma +
+                ", copyright='" + copyright + '\'' +
+                ", descargas=" + descargas +
+                ", autor=" + autores +
+                '}';
     }
 }

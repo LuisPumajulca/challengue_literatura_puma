@@ -3,10 +3,11 @@ package com.example.challengue_literatura_puma.model;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record DatosAutores(
-        @JsonAlias("name") String nombre,
-        @JsonAlias("birth_year") Integer fechaNacimiento,
-        @JsonAlias("death_year") Integer fechaFallecimiento
+public record Datos(
+        @JsonAlias("count") Integer total,
+        @JsonAlias("results") List<DatosLibro> libros
 ) {
 }
